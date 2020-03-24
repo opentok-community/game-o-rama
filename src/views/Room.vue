@@ -1,17 +1,13 @@
 <template>
   <div>
-    <Login />
+    <h1>Game-o-rama Room</h1>
   </div>
 </template>
 
 <script>
-import Login from "@/components/Login";
-
 export default {
-  name: "Host",
-  components: {
-    Login
-  }
+  name: "Room",
+  components: {}
 };
 </script>
 

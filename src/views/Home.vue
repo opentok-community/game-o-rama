@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>Game-o-rama</h1>
-    <Login />
+    <Login :roomName="roomName" />
   </div>
 </template>
 
@@ -10,6 +10,9 @@ import Login from "@/components/Login";
 
 export default {
   name: "Home",
+  props: {
+    roomName: String
+  },
   components: {
     Login
   }

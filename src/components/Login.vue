@@ -1,11 +1,13 @@
 <template>
   <div>
     <div>
-      <label for="name">Your Name</label>
-      <input type="text" id="name" />
+      <label for="username">Your Name</label>
+      <input type="text" id="username" v-model="username" />
     </div>
     <div>
-      <button type="button">Join Game</button>
+      <button v:disabled="username.length === 0" type="button" @click="connect">
+        Join Game
+      </button>
     </div>
   </div>
 </template>
@@ -15,36 +17,84 @@ export default {
   name: "Login",
   components: {},
   props: {
+    roomName: String
+  },
+  data: function() {
+    return {
+      room: "",
+      sessionId: "",
+      token: "",
       isConnecting: false,
-      room: undefined,
-      sessionId: undefined,
-      token: undefined
+      username: ""
+    };
+  },
+  mounted() {
+    // If the route didn't provide the
+    // room name, then generate a random
+    // one here.
+    if (this.roomName !== undefined) {
+      this.room = this.roomName;
+    } else {
+      this.room = this.makeid(15);
+    }
   },
   methods: {
-      async connect() {
-          this.isConnecting = true;
+    async connect() {
+      this.isConnecting = true;
+      const functionUrl = process.env.VUE_APP_FUNCTION_URL;
 
-          // Get the session for the code provided
-          if (room) {
-              try {
-              const sessionResponse = await this.$http.post(`${functionurl}/GetSession`, {
-                  sessionName: room
-              });
+      // Get the session for the code provided
+      if (this.room) {
+        try {
+          const sessionData = (
+            await this.$http.post(`${functionUrl}GetSession`, {
+              sessionName: this.room
+            })
+          ).data;
 
-              }
-              catch (err) {
+          this.sessionId = sessionData.sessionId;
 
-              }
+          const tokenData = (
+            await this.$http.post(`${functionUrl}GetToken`, {
+              sessionId: this.sessionId,
+              userName: this.username
+            })
+          ).data;
 
+          this.token = tokenData.token;
 
-          }
+          console.dir({
+            sessionId: this.sessionId,
+            token: this.token
+          });
 
-
-          // Get a token specific to this user for the session
-
-          // Route the user to the session with their token
+          this.$store
+            .dispatch("login", {
+              sessionId: this.sessionId,
+              token: this.token
+            })
+            .then(() => {
+              this.$router.push({ path: "/Room" });
+            });
+        } catch (err) {
+          console.log(err);
+          this.isConnecting = false;
+        }
       }
-  }:
+    },
+    makeid(length) {
+      var result = "";
+      var characters =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      var charactersLength = characters.length;
+      for (var i = 0; i < length; i++) {
+        result += characters.charAt(
+          Math.floor(Math.random() * charactersLength)
+        );
+      }
+      return result;
+    }
+  }
 };
 </script>
 
