@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Router from "vue-router";
+import { roomGuard } from "@/guards/roomGuard";
 
 import Home from "@/views/Home.vue";
 import Room from "@/views/Room.vue";
@@ -21,7 +22,8 @@ export default new Router({
     {
       path: "/Room",
       name: "Room",
-      component: Room
+      component: Room,
+      beforeEnter: roomGuard
     }
   ]
 });

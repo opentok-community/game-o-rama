@@ -63,13 +63,9 @@ export default {
 
           this.token = tokenData.token;
 
-          console.dir({
-            sessionId: this.sessionId,
-            token: this.token
-          });
-
           this.$store
             .dispatch("login", {
+              roomName: this.room,
               sessionId: this.sessionId,
               token: this.token
             })
