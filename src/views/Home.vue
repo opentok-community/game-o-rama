@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>Game-o-rama</h1>
-    <Login :roomName="roomName" />
+    <Login v-bind:roomName="roomName" />
   </div>
 </template>
 

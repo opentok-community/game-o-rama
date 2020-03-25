@@ -2,11 +2,7 @@
   <div id="session" @error="errorHandler">
     <publisher :session="session" @error="errorHandler"></publisher>
     <div id="subscribers" v-for="stream in streams" :key="stream.streamId">
-      <subscriber
-        @error="errorHandler"
-        :stream="stream"
-        :session="session"
-      ></subscriber>
+      <subscriber @error="errorHandler" :stream="stream" :session="session"></subscriber>
     </div>
   </div>
 </template>
@@ -15,28 +11,26 @@
 import OT from "@opentok/client";
 import Publisher from "./Publisher.vue";
 import Subscriber from "./Subscriber.vue";
+
 const errorHandler = err => {
   alert(err.message);
 };
+
+const apiKey = process.env.VUE_APP_OPENTOK_APIKEY;
+
 export default {
   name: "session",
   components: { Publisher, Subscriber },
-  props: {
-    sessionId: {
-      type: String,
-      required: true
+  computed: {
+    sessionId() {
+      return this.$store.state.sessionId;
     },
-    token: {
-      type: String,
-      required: true
-    },
-    apiKey: {
-      type: String,
-      required: true
+    token() {
+      return this.$store.state.token;
     }
   },
   created() {
-    this.session = OT.initSession(this.apiKey, this.sessionId);
+    this.session = OT.initSession(apiKey, this.sessionId);
     this.session.connect(this.token, err => {
       if (err) {
         errorHandler(err);

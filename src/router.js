@@ -3,7 +3,7 @@ import Router from "vue-router";
 import { roomGuard } from "@/guards/roomGuard";
 
 import Home from "@/views/Home.vue";
-import Room from "@/views/Room.vue";
+import Lobby from "@/views/Lobby.vue";
 
 Vue.use(Router);
 
@@ -12,17 +12,17 @@ export default new Router({
   base: process.env.BASE_URL,
   routes: [
     {
-      path: "/",
+      path: "/:roomName?",
       name: "Home",
       props: route => ({
-        roomName: route.query.room
+        roomName: route.params.roomName
       }),
       component: Home
     },
     {
-      path: "/Room/:roomName",
-      name: "Room",
-      component: Room,
+      path: "/:roomName/lobby",
+      name: "Lobby",
+      component: Lobby,
       beforeEnter: roomGuard
     }
   ]
