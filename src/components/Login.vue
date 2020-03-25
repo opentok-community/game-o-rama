@@ -5,9 +5,7 @@
       <input type="text" id="username" v-model="username" />
     </div>
     <div>
-      <button v:disabled="username.length === 0" type="button" @click="connect">
-        Join Game
-      </button>
+      <button v:disabled="username.length === 0" type="button" @click="connect">Join Game</button>
     </div>
   </div>
 </template>
@@ -21,21 +19,22 @@ export default {
   },
   data: function() {
     return {
-      room: "",
       sessionId: "",
       token: "",
       isConnecting: false,
       username: ""
     };
   },
+  computed: {
+    room() {
+      return this.$store.state.roomName;
+    }
+  },
   mounted() {
-    // If the route didn't provide the
-    // room name, then generate a random
-    // one here.
     if (this.roomName !== undefined) {
-      this.room = this.roomName;
+      this.$store.dispatch("saveRoom", this.roomName);
     } else {
-      this.room = this.makeid(15);
+      this.$store.dispatch("saveRoom");
     }
   },
   methods: {
@@ -70,7 +69,7 @@ export default {
               token: this.token
             })
             .then(() => {
-              this.$router.push({ path: "/Room" });
+              this.$router.push({ path: `/Room/${this.room}` });
             });
         } catch (err) {
           console.log(err);

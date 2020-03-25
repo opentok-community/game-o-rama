@@ -20,7 +20,7 @@ export default new Router({
       component: Home
     },
     {
-      path: "/Room",
+      path: "/Room/:roomName",
       name: "Room",
       component: Room,
       beforeEnter: roomGuard
