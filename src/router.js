@@ -3,7 +3,9 @@ import Router from "vue-router";
 import { roomGuard } from "@/guards/roomGuard";
 
 import Home from "@/views/Home.vue";
+import Room from "@/views/Room.vue";
 import Lobby from "@/views/Lobby.vue";
+import Charades from "@/views/Charades.vue";
 
 Vue.use(Router);
 
@@ -20,10 +22,26 @@ export default new Router({
       component: Home
     },
     {
-      path: "/:roomName/lobby",
-      name: "Lobby",
-      component: Lobby,
-      beforeEnter: roomGuard
+      path: "/:roomName",
+      component: Room,
+      beforeEnter: roomGuard,
+      children: [
+        {
+          path: "",
+          component: Lobby,
+          name: "Room"
+        },
+        {
+          path: "lobby",
+          component: Lobby,
+          name: "Lobby"
+        },
+        {
+          path: "charades",
+          component: Charades,
+          name: "Charades"
+        }
+      ]
     }
   ]
 });

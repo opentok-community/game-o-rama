@@ -11,7 +11,9 @@ export const ACTOR_PART = "actorPart";
 /* Game commands */
 export const SAVE_TOPIC = "saveTopic";
 export const GAME_START = "startGame";
+export const GAME_END = "endGame";
 export const ROUND_START = "startRound";
+export const ROUND_END = "endRound";
 
 export const ACTOR_NEXT = "nextActor";
 export const ACTOR_START = "startActor";

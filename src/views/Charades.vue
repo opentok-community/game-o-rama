@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>Welcome to the lobby. Once you're ready, press "Start Game" to begin.</p>
+    <h3>Charades</h3>
     <p style="text-align:center;">
       <button @click="startGame">Start Game</button>
     </p>
