@@ -4,6 +4,7 @@
 
 <script>
 import OT from "@opentok/client";
+import * as types from "@/state/Mutations";
 export default {
   name: "publisher",
   props: {
@@ -30,6 +31,9 @@ export default {
         if (err) {
           this.$emit("error", err);
         } else {
+          this.$store.dispatch(types.ACTOR_JOIN, {
+            streamId: publisher.stream.streamId
+          });
           this.$emit("publisherConnected", publisher);
         }
       });

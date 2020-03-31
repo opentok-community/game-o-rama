@@ -16,7 +16,7 @@ export default {
       return this.$store.state.roomName;
     },
     url() {
-      return `${window.location.protocol}${window.location.hostname}`;
+      return `${window.location.protocol}//${window.location.hostname}:${window.location.port}`;
     },
     roomLink() {
       return `${this.url}/${this.room}`;

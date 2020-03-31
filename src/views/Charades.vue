@@ -1,16 +1,14 @@
 <template>
   <div>
     <h3>Charades</h3>
-    <p style="text-align:center;">
-      <button @click="startGame">Start Game</button>
-    </p>
+    <p style="text-align:center;"></p>
     <Session />
   </div>
 </template>
 
 <script>
 import Session from "@/components/Session";
-import * as types from "@/state/Mutations";
+// import * as types from "@/state/Mutations";
 
 export default {
   name: "Lobby",
@@ -22,13 +20,7 @@ export default {
       return this.$store.state.roomName;
     }
   },
-  methods: {
-    startGame() {
-      this.$store.dispatch(types.GAME_START).then(() => {
-        this.$router.push({ path: `/${this.room}/charades` });
-      });
-    }
-  }
+  methods: {}
 };
 </script>
 

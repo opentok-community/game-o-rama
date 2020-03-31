@@ -24,9 +24,7 @@ export default {
   },
   methods: {
     startGame() {
-      this.$store.dispatch(types.GAME_START).then(() => {
-        this.$router.push({ path: `/${this.room}/charades` });
-      });
+      this.$store.dispatch(types.GAME_INIT);
     }
   }
 };

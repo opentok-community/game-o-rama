@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
+import OT from "@opentok/client";
 
 import * as types from "./Mutations";
 
@@ -11,17 +12,10 @@ const numberOfRounds = 3;
 const actorTime = 1000; // Milliseconds allowed per actor
 let actorTimer;
 
-/* Actors:
- * {
- *   name: String,
- *   streamId: String,
- *   points: Number
- * }
- */
-
 export default new Vuex.Store({
   state: {
     sessionId: "",
+    session: OT.Session,
     token: "",
     roomName: "",
     loading: false,
@@ -35,6 +29,9 @@ export default new Vuex.Store({
     actors: []
   },
   mutations: {
+    [types.SESSION_JOIN](state, payload) {
+      state.session = payload.session;
+    },
     [types.USER_LOG_IN](state, payload) {
       state.roomName = payload.roomName;
       state.sessionId = payload.sessionId;
@@ -61,6 +58,21 @@ export default new Vuex.Store({
     [types.SAVE_ROOM](state, roomName) {
       state.roomName = roomName;
     },
+    [types.GAME_INIT](state) {
+      state.session.signal(
+        {
+          type: types.GAME_INIT,
+          data: ""
+        },
+        function(error) {
+          if (error) {
+            console.log("signal error: " + error.message);
+          } else {
+            console.log("signal sent");
+          }
+        }
+      );
+    },
     [types.GAME_START](state) {
       state.clues = [];
       state.topic = "";
@@ -83,8 +95,8 @@ export default new Vuex.Store({
     },
 
     [types.ACTOR_NEXT](state, payload) {
-      const nextActor = state.currentActor++;
-      state.currentActor = nextActor >= state.actors.length ? 0 : nextActor;
+      const nextActor = state.currentActor + 1;
+      state.currentActor = nextActor === state.actors.length ? 0 : nextActor;
       state.currentClue = payload.clue;
       state.clues = state.clues.filter(f => f !== payload.clue);
     },
@@ -115,6 +127,12 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    [types.GAME_INIT](context, payload) {
+      context.commit(types.GAME_INIT, payload);
+    },
+    [types.SESSION_JOIN](context, payload) {
+      context.commit(types.SESSION_JOIN, payload);
+    },
     async [types.USER_LOG_IN](context, payload) {
       context.commit(types.LOADING, true);
       context.commit(types.USER_LOG_IN, payload);
@@ -158,7 +176,7 @@ export default new Vuex.Store({
         )
       ).data.topic;
 
-      const clues = (
+      const clueData = (
         await axios.post(
           `${functionUrl}GetClues`,
           {
@@ -169,6 +187,8 @@ export default new Vuex.Store({
           }
         )
       ).data.clues;
+
+      const clues = clueData.map(m => m.name);
 
       const payload = {
         topic,

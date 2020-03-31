@@ -4,12 +4,15 @@ export const USER_LOG_OUT = "logout";
 export const LOADING = "loading";
 export const SAVE_ROOM = "saveRoom";
 
+export const SESSION_JOIN = "sessionJoin";
+
 /* Member commands */
 export const ACTOR_JOIN = "actorJoin";
 export const ACTOR_PART = "actorPart";
 
 /* Game commands */
 export const SAVE_TOPIC = "saveTopic";
+export const GAME_INIT = "initGame";
 export const GAME_START = "startGame";
 export const GAME_END = "endGame";
 export const ROUND_START = "startRound";
